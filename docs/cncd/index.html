@@ -5,16 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Generator pentru formular de sesizare CNCD - Creează și descarcă sesizări pentru Consiliul Național pentru Combaterea Discriminării">
     <title>Formular Sesizare CNCD - Generator URL</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#007bff',
+                        'primary-dark': '#0056b3',
+                        secondary: '#6c757d',
+                        success: '#28a745',
+                        danger: '#dc3545',
+                        warning: '#ffc107',
+                        info: '#17a2b8'
+                    },
+                    maxWidth: {
+                        'form': '800px'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="header-container" role="banner">
-        <h1>Formular de Sesizare CNCD</h1>
-        <div class="header-controls">
+<body class="bg-white text-gray-900 max-w-form mx-auto p-4 font-sans">
+    <header class="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200" role="banner">
+        <h1 class="text-2xl font-bold text-gray-900">Formular de Sesizare CNCD</h1>
+        <div class="flex gap-2 ml-auto">
             <button
                 type="button"
                 onclick="generatePermalink()"
-                class="permalink-button"
+                class="p-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
                 title="Generează link permanent pentru formularul completat"
                 aria-label="Generează link permanent pentru formularul completat">
                 <span aria-hidden="true">🔗</span>
@@ -22,281 +42,280 @@
         </div>
     </header>
 
-    <main role="main">
-        <section class="alerts-section" aria-labelledby="alerts-heading">
-            <h2 id="alerts-heading" class="visually-hidden">Avertismente și instrucțiuni</h2>
+    <main class="flex flex-col gap-8" role="main">
+        <section class="mb-8" aria-labelledby="alerts-heading">
+            <h2 id="alerts-heading" class="sr-only">Avertismente și instrucțiuni</h2>
 
-            <div class="alert alert-warning" role="alert" aria-labelledby="warning-heading">
-                <h3 id="warning-heading">⚠️ Avertisment</h3>
-                <p>
+            <div class="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg" role="alert" aria-labelledby="warning-heading">
+                <h3 id="warning-heading" class="text-lg font-semibold text-orange-800 mb-2">⚠️ Avertisment</h3>
+                <p class="text-orange-700 mb-2">
                     Acest generator este oferit cu titlu informativ.
                     Răspunderea pentru corectitudinea și veridicitatea datelor completate aparține exclusiv persoanei care folosește formularul.
                 </p>
-                <p>
+                <p class="text-orange-700">
                     Pentru detalii oficiale și instrucțiuni complete, consultați
-                    <a href="https://www.cncd.ro/depune-o-petitie" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.cncd.ro/depune-o-petitie" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">
                         pagina oficială CNCD
                     </a>.
                 </p>
             </div>
 
-            <div class="alert alert-info" role="complementary" aria-labelledby="instructions-heading">
-                <h3 id="instructions-heading">📋 Instrucțiuni pentru depunerea corectă a sesizării CNCD</h3>
-                <ol>
+            <div class="p-4 bg-cyan-50 border border-cyan-200 rounded-lg" role="complementary" aria-labelledby="instructions-heading">
+                <h3 id="instructions-heading" class="text-lg font-semibold text-cyan-800 mb-3">📋 Instrucțiuni pentru depunerea corectă a sesizării CNCD</h3>
+                <ol class="list-decimal list-inside space-y-2 text-cyan-700 mb-3">
                     <li>Completează formularul de mai jos cu toate datele necesare.</li>
                     <li>Desenează semnătura ta în spațiul dedicat (folosește mouse-ul sau degetul pe dispozitive touch).</li>
                     <li>Apasă butonul "Descarcă sesizarea (PDF)" - se va genera automat un document PDF complet cu semnătura inclusă.</li>
                     <li>După descărcare, folosește link-urile de email afișate pentru a trimite sesizarea către CNCD (support@cncd.ro).</li>
                 </ol>
-                <p><strong>Important:</strong> Sesizarea generată este deja semnată electronic și gata pentru trimitere. Nu este nevoie de semnătură suplimentară pe hârtie.</p>
+                <p class="text-cyan-700 font-semibold">Important: Sesizarea generată este deja semnată electronic și gata pentru trimitere. Nu este nevoie de semnătură suplimentară pe hârtie.</p>
             </div>
         </section>
 
-        <section class="form-section" aria-labelledby="form-heading">
-            <h2 id="form-heading">Completează câmpurile pentru a genera o sesizare precompletată</h2>
+        <section class="mb-8" aria-labelledby="form-heading">
+            <h2 id="form-heading" class="text-xl font-bold text-gray-900 mb-6">Completează câmpurile pentru a genera o sesizare precompletată</h2>
 
-            <form onsubmit="generatePDF(event)" role="form" aria-labelledby="form-heading" novalidate>
-                <fieldset class="form-fieldset" aria-labelledby="personal-info-heading">
-                    <legend id="personal-info-heading">Informații personale</legend>
+            <form onsubmit="generatePDF(event)" role="form" aria-labelledby="form-heading" novalidate class="space-y-8">
+                <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50" aria-labelledby="personal-info-heading">
+                    <legend id="personal-info-heading" class="text-lg font-bold text-gray-800 px-2 bg-white rounded">Informații personale</legend>
 
-                    <div class="form-group">
-                        <label for="nume" class="form-label required">
+                    <div class="mb-6">
+                        <label for="nume" class="block font-bold mb-2 text-gray-800">
                             Numele complet
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <input
                             type="text"
                             id="nume"
                             name="nume"
                             required
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: Popescu Ion"
                             minlength="2"
                             maxlength="100"
                             aria-describedby="nume-help"
                             autocomplete="name">
-                        <div id="nume-help" class="form-help">Introduceți numele complet (cel puțin 2 caractere)</div>
+                        <div id="nume-help" class="text-sm text-gray-600 mt-1">Introduceți numele complet (cel puțin 2 caractere)</div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="adresa" class="form-label required">
+                    <div class="mb-6">
+                        <label for="adresa" class="block font-bold mb-2 text-gray-800">
                             Adresa de corespondență
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <input
                             type="text"
                             id="adresa"
                             name="adresa"
                             required
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: Str. Exemplu nr. 1, București"
                             minlength="10"
                             maxlength="200"
                             aria-describedby="adresa-help"
                             autocomplete="street-address">
-                        <div id="adresa-help" class="form-help">Introduceți adresa completă (cel puțin 10 caractere)</div>
+                        <div id="adresa-help" class="text-sm text-gray-600 mt-1">Introduceți adresa completă (cel puțin 10 caractere)</div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="reprezentant" class="form-label optional">
+                    <div class="mb-6">
+                        <label for="reprezentant" class="block font-bold mb-2 text-gray-600">
                             Numele reprezentantului legal și adresa de corespondență
-                            <span class="optional-indicator" aria-label="câmp opțional">(opțional)</span>
+                            <span class="text-gray-500" aria-label="câmp opțional">(opțional)</span>
                         </label>
                         <input
                             type="text"
                             id="reprezentant"
                             name="reprezentant"
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: Av. Ionescu Maria, Str. Avocatului nr. 3, București"
                             maxlength="200"
                             aria-describedby="reprezentant-help">
-                        <div id="reprezentant-help" class="form-help">
+                        <div id="reprezentant-help" class="text-sm text-gray-600 mt-1">
                             Pentru situația în care petentul/a este reprezentat(ă) legal este necesară atașarea unei împuterniciri
                         </div>
                     </div>
                 </fieldset>
 
-                <fieldset class="form-fieldset" aria-labelledby="complaint-info-heading">
-                    <legend id="complaint-info-heading">Informații despre reclamat</legend>
+                <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50" aria-labelledby="complaint-info-heading">
+                    <legend id="complaint-info-heading" class="text-lg font-bold text-gray-800 px-2 bg-white rounded">Informații despre reclamat</legend>
 
-                    <div class="form-group">
-                        <label for="data_eveniment" class="form-label required">
+                    <div class="mb-6">
+                        <label for="data_eveniment" class="block font-bold mb-2 text-gray-800">
                             Data evenimentului
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <input
                             type="text"
                             id="data_eveniment"
                             name="data_eveniment"
                             required
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: 15 martie 2025 sau 20-25 iunie 2025"
                             minlength="3"
                             maxlength="50"
                             aria-describedby="data_eveniment-help">
-                        <div id="data_eveniment-help" class="form-help">Introduceți data când s-a produs evenimentul de discriminare (poate fi o dată specifică sau un interval)</div>
+                        <div id="data_eveniment-help" class="text-sm text-gray-600 mt-1">Introduceți data când s-a produs evenimentul de discriminare (poate fi o dată specifică sau un interval)</div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="nume_reclamat" class="form-label required">
+                    <div class="mb-6">
+                        <label for="nume_reclamat" class="block font-bold mb-2 text-gray-800">
                             Numele persoanei/instituției reclamate
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <input
                             type="text"
                             id="nume_reclamat"
                             name="nume_reclamat"
                             required
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: Inspectoratul Școlar Județean"
                             minlength="2"
                             maxlength="150"
                             aria-describedby="nume_reclamat-help">
-                        <div id="nume_reclamat-help" class="form-help">Introduceți numele persoanei sau instituției reclamate (cel puțin 2 caractere)</div>
+                        <div id="nume_reclamat-help" class="text-sm text-gray-600 mt-1">Introduceți numele persoanei sau instituției reclamate (cel puțin 2 caractere)</div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="adresa_reclamat" class="form-label required">
+                    <div class="mb-6">
+                        <label for="adresa_reclamat" class="block font-bold mb-2 text-gray-800">
                             Adresa instituției/persoanei reclamate
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <input
                             type="text"
                             id="adresa_reclamat"
                             name="adresa_reclamat"
                             required
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: Str. Exemplu nr. 2, București"
                             minlength="10"
                             maxlength="200"
                             aria-describedby="adresa_reclamat-help">
-                        <div id="adresa_reclamat-help" class="form-help">Introduceți adresa completă a instituției/persoanei reclamate (cel puțin 10 caractere)</div>
+                        <div id="adresa_reclamat-help" class="text-sm text-gray-600 mt-1">Introduceți adresa completă a instituției/persoanei reclamate (cel puțin 10 caractere)</div>
                     </div>
                 </fieldset>
 
-                <fieldset class="form-fieldset" aria-labelledby="complaint-details-heading">
-                    <legend id="complaint-details-heading">Detalii despre faptă</legend>
+                <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50" aria-labelledby="complaint-details-heading">
+                    <legend id="complaint-details-heading" class="text-lg font-bold text-gray-800 px-2 bg-white rounded">Detalii despre faptă</legend>
 
-                    <div class="form-group">
-                        <label for="descriere" class="form-label required">
+                    <div class="mb-6">
+                        <label for="descriere" class="block font-bold mb-2 text-gray-800">
                             Descrierea detaliată a faptei (context, criteriu, dovezi)
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <textarea
                             id="descriere"
                             name="descriere"
                             required
                             rows="10"
-                            class="form-textarea"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors resize-y"
                             placeholder="Descrie detaliat fapta, contextul, criteriul de discriminare, dovezile, data, martorii etc."
                             minlength="50"
                             maxlength="2000"
                             aria-describedby="descriere-help"></textarea>
-                        <div id="descriere-help" class="form-help">
+                        <div id="descriere-help" class="text-sm text-gray-600 mt-1">
                             Descrieți cât mai detaliat fapta de discriminare. Datele prezentate trebuie susținute detaliat, să conțină data la care s-a petrecut fapta reclamată, contextul acesteia, împrejurările, martorii și dovezile pe care se susțin cele reclamate precum și criteriul de discriminare (motivul care stă la baza respectivei fapte – de ex. etnic, naționalitate, sex, boală cronică necontagioasă etc. – vezi O.G. 137/2000 privind prevenirea și sancționarea tuturor faptelor de discriminare republicată) și dreptul încălcat. În cazul petiției formulate de o organizație neguvernamentală care apără drepturile anumitor persoane, grupuri vulnerabile sau comunități, trebuie dovedit (prin documente – copie a actului de constituire, statut etc.) că discriminarea se manifestă în domeniul acesteia de activitate şi că aduce atingere unei comunități/grup de persoane ale căror drepturi le protejează. Astfel, o copie a actului de constituire a organizației neguvernamentale petentă / statutul organizației este necesar/ă pentru dovedirea acestui aspect. (cel puțin 50 de caractere)
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="dovezi" class="form-label required">
+                    <div class="mb-6">
+                        <label for="dovezi" class="block font-bold mb-2 text-gray-800">
                             Dovezile disponibile
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
                         <textarea
                             id="dovezi"
                             name="dovezi"
                             required
                             rows="6"
-                            class="form-textarea"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors resize-y"
                             placeholder="Listați dovezile pe care le aveți: documente, înregistrări audio/video, declarații martori, capturi ecran, articole de presă etc."
                             minlength="50"
                             maxlength="1000"
                             aria-describedby="dovezi-help"></textarea>
-                        <div id="dovezi-help" class="form-help">
+                        <div id="dovezi-help" class="text-sm text-gray-600 mt-1">
                             Următoarele înscrisuri/documente pe care le depun în copie (numărul exemplarelor să fie egal cu numărul reclamaților plus un exemplar pt. C.N.C.D); Declarațiile scrise sau audio/video ale următorilor martori cu numele și prenumele ...... și adresele de corespondență ...... dacă va fi necesară o audiere sau o investigație suplimentară; Înregistrări audio/video relevante (de ex, înregistrarea unei emisiuni) împreună cu transcript-ul acestora; Articole de presă/ mass-media; Capturi ecran/ foto pentru conținut de pe internet; Date statistice (de la caz la caz, când există şi sunt relevante în cauză).
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="articole" class="form-label optional">
+                    <div class="mb-6">
+                        <label for="articole" class="block font-bold mb-2 text-gray-600">
                             Articolele OG 137/2000 invocate
-                            <span class="optional-indicator" aria-label="câmp opțional">(opțional)</span>
+                            <span class="text-gray-500" aria-label="câmp opțional">(opțional)</span>
                         </label>
                         <input
                             type="text"
                             id="articole"
                             name="articole"
-                            class="form-input"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                             placeholder="ex: Art. 2 alin. (1), Art. 3 alin. (1) lit. a), Art. 4 alin. (1)"
                             maxlength="100"
                             aria-describedby="articole-help">
-                        <div id="articole-help" class="form-help">Introduceți articolele din Ordonanța de Urgență 137/2000 dacă sunt cunoscute (puteți lista mai multe articole separate prin virgulă)</div>
+                        <div id="articole-help" class="text-sm text-gray-600 mt-1">Introduceți articolele din Ordonanța de Urgență 137/2000 dacă sunt cunoscute (puteți lista mai multe articole separate prin virgulă)</div>
                     </div>
                 </fieldset>
 
-                <fieldset class="form-fieldset" aria-labelledby="signature-heading">
-                    <legend id="signature-heading">Semnătură</legend>
+                <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50" aria-labelledby="signature-heading">
+                    <legend id="signature-heading" class="text-lg font-bold text-gray-800 px-2 bg-white rounded">Semnătură</legend>
 
-                    <div class="form-group">
-                        <label for="signature-canvas" class="form-label required">
+                    <div class="mb-6">
+                        <label for="signature-canvas" class="block font-bold mb-2 text-gray-800">
                             Semnătură olografă
-                            <span class="required-indicator" aria-label="câmp obligatoriu">*</span>
+                            <span class="text-red-500" aria-label="câmp obligatoriu">*</span>
                         </label>
-                        <div class="signature-container">
+                        <div class="flex flex-col items-start gap-4">
                             <canvas
                                 id="signature-canvas"
                                 width="400"
                                 height="120"
-                                class="form-canvas"
+                                class="w-full max-w-lg border-2 border-gray-300 rounded cursor-crosshair hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 role="img"
                                 aria-label="Zonă pentru desenarea semnăturii"
                                 tabindex="0">
                                 <p>Browser-ul dvs. nu suportă elementul canvas pentru semnătură.</p>
                             </canvas>
-                            <div class="signature-controls">
+                            <div class="flex gap-2">
                                 <button
                                     type="button"
                                     onclick="clearSignature()"
-                                    class="form-button form-button-secondary"
-                                    aria-label="Șterge semnătura">
+                                    class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
                                     🗑️ Curăță semnătura
                                 </button>
                             </div>
                         </div>
-                        <div class="form-help">
+                        <div class="text-sm text-gray-600 mt-2">
                             Desenează semnătura ta în spațiul de mai sus folosind mouse-ul sau degetul pe dispozitive touch
                         </div>
                     </div>
                 </fieldset>
 
-                <div class="form-actions">
+                <div class="flex flex-col items-center gap-2">
                     <button
                         type="submit"
                         id="submit-button"
-                        class="form-button form-button-primary"
+                        class="px-6 py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         aria-describedby="submit-help">
                         📄 Descarcă sesizarea (PDF)
                     </button>
-                    <div id="submit-help" class="form-help">
+                    <div id="submit-help" class="text-sm text-gray-600 text-center">
                         Apasă pentru a genera și descărca documentul PDF cu sesizarea completă
                     </div>
                 </div>
             </form>
         </section>
 
-        <section class="email-section" aria-labelledby="email-heading">
-            <div id="email-links" class="email-links" aria-hidden="true">
-                <h2 id="email-heading">Trimite sesizarea către CNCD</h2>
-                <p>După descărcarea PDF-ului, folosește unul din link-urile de mai jos pentru a trimite sesizarea:</p>
-                <div class="email-buttons">
-                    <a id="gmail-link" target="_blank" rel="noopener noreferrer" class="email-link">
-                        <button type="button" class="email-button">
+        <section class="mb-8" aria-labelledby="email-heading">
+            <div id="email-links" class="hidden" aria-hidden="true">
+                <h2 id="email-heading" class="text-xl font-bold text-gray-900 mb-4">Trimite sesizarea către CNCD</h2>
+                <p class="text-gray-700 mb-4">După descărcarea PDF-ului, folosește unul din link-urile de mai jos pentru a trimite sesizarea:</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a id="gmail-link" target="_blank" rel="noopener noreferrer" class="flex-1">
+                        <button type="button" class="w-full px-4 py-3 bg-red-500 text-white font-semibold rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
                             <span aria-hidden="true">✉️</span>
                             Deschide în Gmail
                         </button>
                     </a>
-                    <a id="mailto-link" class="email-link">
-                        <button type="button" class="email-button">
+                    <a id="mailto-link" class="flex-1">
+                        <button type="button" class="w-full px-4 py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                             <span aria-hidden="true">📧</span>
                             Deschide în aplicația ta de email
                         </button>
@@ -306,7 +325,7 @@
         </section>
     </main>
 
-    <div id="preview" class="preview" aria-hidden="true" role="document"></div>
+    <div id="preview" class="hidden" aria-hidden="true" role="document"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.12/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
