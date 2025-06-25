@@ -107,22 +107,26 @@ function highlightField(fieldId, hasError) {
     const helpElement = document.getElementById(`${fieldId}-help`);
 
     if (hasError) {
-        field.classList.add('error');
+        field.classList.add('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+        field.classList.remove('border-gray-300', 'focus:ring-blue-500', 'focus:border-blue-500');
         field.setAttribute('aria-invalid', 'true');
         field.setAttribute('aria-describedby', `${fieldId}-help`);
 
         // Update help text to show error
         if (helpElement) {
-            helpElement.style.color = 'var(--color-danger)';
+            helpElement.classList.add('text-red-600');
+            helpElement.classList.remove('text-gray-600');
             helpElement.textContent = `Eroare: ${getErrorMessage(fieldId)}`;
         }
     } else {
-        field.classList.remove('error');
+        field.classList.remove('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+        field.classList.add('border-gray-300', 'focus:ring-blue-500', 'focus:border-blue-500');
         field.setAttribute('aria-invalid', 'false');
 
         // Restore original help text
         if (helpElement) {
-            helpElement.style.color = '';
+            helpElement.classList.remove('text-red-600');
+            helpElement.classList.add('text-gray-600');
             restoreHelpText(fieldId);
         }
     }
@@ -132,11 +136,13 @@ function highlightField(fieldId, hasError) {
 function highlightCanvas(hasError) {
     const canvas = document.getElementById('signature-canvas');
     if (hasError) {
-        canvas.classList.add('error');
+        canvas.classList.add('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+        canvas.classList.remove('border-gray-300', 'focus:ring-blue-500', 'focus:border-blue-500');
         canvas.setAttribute('aria-invalid', 'true');
         canvas.setAttribute('aria-describedby', 'signature-error');
     } else {
-        canvas.classList.remove('error');
+        canvas.classList.remove('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+        canvas.classList.add('border-gray-300', 'focus:ring-blue-500', 'focus:border-blue-500');
         canvas.setAttribute('aria-invalid', 'false');
         canvas.removeAttribute('aria-describedby');
     }
@@ -172,7 +178,7 @@ function announceToScreenReader(message) {
     const announcement = document.createElement('div');
     announcement.setAttribute('aria-live', 'polite');
     announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'visually-hidden';
+    announcement.className = 'sr-only';
     announcement.textContent = message;
 
     document.body.appendChild(announcement);
@@ -412,7 +418,7 @@ async function generatePDF(event) {
         }
 
         // Scroll to the first field with an error
-        const firstErrorField = document.querySelector('.form-input.error, .form-textarea.error, .form-canvas.error');
+        const firstErrorField = document.querySelector('input[aria-invalid="true"], textarea[aria-invalid="true"], canvas[aria-invalid="true"]');
         if (firstErrorField) {
             firstErrorField.scrollIntoView({
                 behavior: 'smooth',
@@ -468,13 +474,14 @@ async function generatePDF(event) {
 
         const preview = document.getElementById('preview');
         preview.innerHTML = htmlContent;
-        preview.classList.add('show');
+        preview.classList.remove('hidden');
+        preview.classList.add('block');
         preview.setAttribute('aria-hidden', 'false');
 
         // Add signature in the right place
         const signatureImg = document.createElement('img');
         signatureImg.src = signatureDataUrl;
-        signatureImg.className = 'signature-image';
+        signatureImg.className = 'max-w-xs h-auto border border-gray-300 rounded';
         signatureImg.alt = 'Semnătura digitală';
 
         // Replace underline placeholder for signature with image
@@ -495,7 +502,8 @@ async function generatePDF(event) {
             })
             .save();
 
-        preview.classList.remove('show');
+        preview.classList.add('hidden');
+        preview.classList.remove('block');
         preview.setAttribute('aria-hidden', 'true');
 
         // Set and display email links
@@ -509,7 +517,8 @@ async function generatePDF(event) {
         document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
 
         const emailLinks = document.getElementById('email-links');
-        emailLinks.classList.add('show');
+        emailLinks.classList.remove('hidden');
+        emailLinks.classList.add('block');
         emailLinks.setAttribute('aria-hidden', 'false');
 
         announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt disponibile.');
@@ -593,7 +602,7 @@ function addKeyboardNavigation() {
     // Add skip link functionality
     const skipLink = document.createElement('a');
     skipLink.href = '#form-heading';
-    skipLink.className = 'skip-link';
+    skipLink.className = 'absolute top-[-40px] left-6 bg-blue-500 text-white px-2 py-1 rounded text-sm no-underline z-50 focus:top-6';
     skipLink.textContent = 'Sari la formular';
     document.body.insertBefore(skipLink, document.body.firstChild);
 
