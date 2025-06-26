@@ -508,7 +508,7 @@ async function generatePDF(event) {
 
         // Set and display email links
         const nume = encodeURIComponent(values.nume);
-        const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume}`);
+        const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
         const body = encodeURIComponent(
             `Bună ziua,\n\nVă transmit, atașat, sesizarea completată și semnată privind o posibilă faptă de discriminare.\n\nVă rog să confirmați primirea și să-mi comunicați numărul de înregistrare.\n\nCu stimă,\n${values.nume}`
         );
