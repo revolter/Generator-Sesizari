@@ -327,82 +327,72 @@ function getSignatureDataUrl() {
     return canvas.toDataURL('image/png');
 }
 
-// Permalink generation with enhanced URL handling and accessibility
+// Compress data using Pako (Gzip) - direct string compression
+function compressData(value) {
+    if (value === '') { return ''; }
+    const data = new TextEncoder().encode(value);
+    const compressed = pako.deflate(data, { level: 9 });
+    return window.btoa(String.fromCharCode.apply(null, compressed));
+}
+
+// Decompress data using Pako (Gzip) - direct string decompression
+function decompressData(compressedValue) {
+    if (compressedValue === '') { return ''; }
+    const data = Uint8Array.from(window.atob(compressedValue), c => c.charCodeAt(0));
+    return pako.inflate(data, { to: 'string' });
+}
+
+// Permalink generation with selective compression (only for long fields)
 function generatePermalink() {
     const values = getFormValues();
-    const params = new URLSearchParams();
 
-    // Add form values to URL parameters with proper encoding
-    Object.keys(values).forEach(key => {
-        if (values[key] && values[key].trim()) {
-            // Properly encode the value to handle special characters
-            const encodedValue = encodeURIComponent(values[key].trim());
-            params.set(key, encodedValue);
-        }
-    });
-
-    // Check if we have any parameters
-    if (params.toString().length === 0) {
+    // Check if we have any data
+    const hasData = Object.keys(values).some(key => values[key] && values[key].trim());
+    if (!hasData) {
         announceToScreenReader('Nu există date pentru a genera un link permanent');
         return;
     }
 
-    // Create the permalink URL
-    const baseUrl = window.location.origin + window.location.pathname;
-    const queryString = params.toString();
-    let fullUrl = baseUrl + '?' + queryString;
+    try {
+        const params = new URLSearchParams();
 
-    // Check URL length (browsers typically have a limit around 2000-8000 characters)
-    const maxUrlLength = 2000; // Conservative limit for compatibility
-    if (fullUrl.length > maxUrlLength) {
-        fullUrl = truncateLongUrl(baseUrl, params, maxUrlLength);
-    }
-
-    // Create the permalink URL and redirect to it
-    announceToScreenReader('Link permanent generat. Redirecționare...');
-    window.location.href = fullUrl;
-}
-
-// Handle URLs that exceed the maximum length
-function truncateLongUrl(baseUrl, params, maxUrlLength) {
-    // Try to truncate the longest field first
-    const fieldLengths = {};
-    params.forEach((value, key) => {
-        fieldLengths[key] = value.length;
-    });
-
-    // Sort fields by length (longest first)
-    const sortedFields = Object.keys(fieldLengths).sort((a, b) => fieldLengths[b] - fieldLengths[a]);
-
-    // Try to create a shorter URL by truncating the longest field
-    const shortenedParams = new URLSearchParams();
-    let currentLength = baseUrl.length + 1; // +1 for the '?' character
-
-    for (const field of sortedFields) {
-        const value = params.get(field);
-        const encodedField = encodeURIComponent(field);
-        const encodedValue = value;
-
-        // Calculate length if we add this field
-        const fieldLength = encodedField.length + encodedValue.length + 2; // +2 for '=' and '&'
-
-        if (currentLength + fieldLength <= maxUrlLength) {
-            shortenedParams.set(field, value);
-            currentLength += fieldLength;
-        } else {
-            // Try to truncate this field
-            const maxValueLength = maxUrlLength - currentLength - encodedField.length - 2;
-            if (maxValueLength > 10) { // Ensure we have at least 10 characters
-                const truncatedValue = value.substring(0, maxValueLength - 3) + '...';
-                shortenedParams.set(field, truncatedValue);
-                break;
+        // Add short fields in clear text
+        const shortFields = ['nume', 'adresa', 'reprezentant', 'data_eveniment', 'nume_reclamat', 'adresa_reclamat', 'articole'];
+        shortFields.forEach(key => {
+            if (values[key] && values[key].trim()) {
+                params.set(key, encodeURIComponent(values[key].trim()));
             }
+        });
+
+        // Compress long fields separately
+        if (values.descriere && values.descriere.trim()) {
+            const compressedDescriere = compressData(values.descriere.trim());
+            params.set('descriere_compressed', compressedDescriere);
         }
+
+        if (values.dovezi && values.dovezi.trim()) {
+            const compressedDovezi = compressData(values.dovezi.trim());
+            params.set('dovezi_compressed', compressedDovezi);
+        }
+
+        // Create the permalink URL
+        const baseUrl = window.location.origin + window.location.pathname;
+        const queryString = params.toString();
+        const fullUrl = baseUrl + '?' + queryString;
+
+        // Check if URL is too long
+        const maxUrlLength = 8000;
+        if (fullUrl.length > maxUrlLength) {
+            announceToScreenReader('URL-ul este prea lung. Încercați să reduceți conținutul din descriere sau dovezi.');
+            return;
+        }
+
+        window.location.href = fullUrl;
+
+    } catch (error) {
+        console.error('Error generating permalink:', error);
+        announceToScreenReader('Eroare la generarea link-ului permanent');
     }
-
-    const shortenedUrl = baseUrl + '?' + shortenedParams.toString();
-
-    return shortenedUrl;
 }
 
 // PDF generation with enhanced error handling and accessibility
@@ -541,10 +531,43 @@ async function generatePDF(event) {
 // Initialize form with URL parameters
 function initializeForm() {
     const params = new URLSearchParams(window.location.search);
+
+    // Handle compressed descriere
+    const compressedDescriere = params.get('descriere_compressed');
+    if (compressedDescriere) {
+        try {
+            const descriere = decompressData(compressedDescriere);
+            const el = document.getElementById('descriere');
+            if (el) {
+                el.value = descriere;
+            }
+        } catch (error) {
+            console.error('Error decompressing descriere:', error);
+        }
+    }
+
+    // Handle compressed dovezi
+    const compressedDovezi = params.get('dovezi_compressed');
+    if (compressedDovezi) {
+        try {
+            const dovezi = decompressData(compressedDovezi);
+            const el = document.getElementById('dovezi');
+            if (el) {
+                el.value = dovezi;
+            }
+        } catch (error) {
+            console.error('Error decompressing dovezi:', error);
+        }
+    }
+
+    // Handle all other fields in clear text
     params.forEach((value, key) => {
-        const el = document.getElementById(key);
-        if (el) {
-            el.value = decodeURIComponent(value);
+        // Skip compressed fields
+        if (key !== 'descriere_compressed' && key !== 'dovezi_compressed') {
+            const el = document.getElementById(key);
+            if (el) {
+                el.value = decodeURIComponent(value);
+            }
         }
     });
 }
@@ -563,7 +586,6 @@ function addRealTimeValidation() {
                 if (fieldValue) {
                     // Basic validation on blur
                     let isValid = true;
-
                     switch (fieldId) {
                         case 'nume':
                             isValid = fieldValue.length >= 2;
