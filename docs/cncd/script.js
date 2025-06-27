@@ -445,11 +445,11 @@ async function generatePDF(event) {
             '{NUME}': values.nume,
             '{ADRESA}': values.adresa,
             '{REPREZENTANT}': values.reprezentant || '',
-            '{DATA_EVENIMENT}': values.data_eveniment || '',
+            '{DATA_EVENIMENT}': values.data_eveniment,
             '{NUME_RECLAMAT}': values.nume_reclamat,
             '{ADRESA_RECLAMAT}': values.adresa_reclamat,
             '{DESCRIERE}': values.descriere,
-            '{DOVEZI}': values.dovezi || '',
+            '{DOVEZI}': values.dovezi,
             '{ARTICOLE}': values.articole || '....................',
             '{DATA}': new Date().toLocaleDateString('ro-RO'),
             '{SEMNATURA}': '' // Will be added as image
