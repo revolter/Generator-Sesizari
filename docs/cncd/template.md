@@ -13,7 +13,9 @@ Vă solicit ca, pe lângă constatarea faptei de discriminare și aplicarea amen
 
 **MOTIVELE PETIȚIEI SUNT URMĂTOARELE:**
 
-**În fapt**, <u>{DESCRIERE}</u>
+**În fapt**:
+
+{DESCRIERE}
 
 **În drept**, faptele descrise se încadrează în prevederile <u>{ARTICOLE}</u> din OG 137/2000 privind prevenirea și sancționarea tuturor formelor de discriminare republicată.
 
