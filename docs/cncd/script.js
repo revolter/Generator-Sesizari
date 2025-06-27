@@ -278,8 +278,7 @@ canvas.addEventListener('touchend', e => {
 
 canvas.addEventListener('touchmove', e => {
     e.preventDefault();
-    const coords = getCanvasCoordinates(e);
-    draw({ clientX: coords.x, clientY: coords.y });
+    draw(e);
 });
 
 // Keyboard events for accessibility
