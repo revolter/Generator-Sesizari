@@ -450,7 +450,7 @@ async function generatePDF(event) {
             '{ADRESA_RECLAMAT}': values.adresa_reclamat,
             '{DESCRIERE}': values.descriere,
             '{DOVEZI}': values.dovezi,
-            '{ARTICOLE}': values.articole || '....................',
+            '{ARTICOLE}': values.articole || '..........',
             '{DATA}': new Date().toLocaleDateString('ro-RO'),
             '{SEMNATURA}': '' // Will be added as image
         };
