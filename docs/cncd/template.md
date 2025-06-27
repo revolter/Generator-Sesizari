@@ -1,17 +1,17 @@
 **Către,**\
-**CONSILIUL NAŢIONAL PENTRU COMBATEREA DISCRIMINĂRII**
+**CONSILIUL NAȚIONAL PENTRU COMBATEREA DISCRIMINĂRII**
 
-**DOMNULE PREŞEDINTE,**
+**DOMNULE PREȘEDINTE,**
 
 Prin prezenta, subsemnatul(a) <u>{NUME}</u>, domiciliat/(ă) cu adresa de corespondență în <u>{ADRESA}</u> sau prin reprezentant legal cu adresa de corespondență (pentru situația în care petentul/a este reprezentată legal este necesară atașarea unei împuterniciri) <u>{REPREZENTANT}</u> formulez:
 
 # **PETIȚIE**
 
-În temeiul Ordonanţei Guvernului nr. 137/2000 privind prevenirea şi sancţionarea tuturor formelor de discriminare, republicată, formulez prezenţa PETIŢIE prin care solicit constatarea şi sancţionarea faptei prevăzută de <u>{ARTICOLE}</u> din OG 137/2000 privind prevenirea și sancționarea tuturor formelor de discriminare republicată, săvârşită la data de <u>{DATA_EVENIMENT}</u>, numele și prenumele sau denumirea persoanei juridice reclamate <u>{NUME_RECLAMAT}</u> în calitate de reclamat/ă, domiciliat/ă în/ cu adresa de corespondență sau cu sediul (pentru persoana juridică) <u>{ADRESA_RECLAMAT}</u>.
+În temeiul Ordonanței Guvernului nr. 137/2000 privind prevenirea și sancționarea tuturor formelor de discriminare, republicată, formulez prezența PETIȚIE prin care solicit constatarea și sancționarea faptei prevăzută de <u>{ARTICOLE}</u> din OG 137/2000 privind prevenirea și sancționarea tuturor formelor de discriminare republicată, săvârșită la data de <u>{DATA_EVENIMENT}</u>, numele și prenumele sau denumirea persoanei juridice reclamate <u>{NUME_RECLAMAT}</u> în calitate de reclamat/ă, domiciliat/ă în/ cu adresa de corespondență sau cu sediul (pentru persoana juridică) <u>{ADRESA_RECLAMAT}</u>.
 
-Vă solicit ca, pe lângă constatarea faptei de discriminare și aplicarea amenzii contravenţionale, să dispuneţi obligarea părţii reclamate să publice, în mass-media, un rezumat al hotărârii.
+Vă solicit ca, pe lângă constatarea faptei de discriminare și aplicarea amenzii contravenționale, să dispuneți obligarea părții reclamate să publice, în mass-media, un rezumat al hotărârii.
 
-**MOTIVELE PETIŢIEI SUNT URMĂTOARELE:**
+**MOTIVELE PETIȚIEI SUNT URMĂTOARELE:**
 
 **În fapt**, <u>{DESCRIERE}</u>
 
@@ -29,4 +29,4 @@ Dată,\
 Semnătură,\
 <u id="semnatura">{SEMNATURA}</u>
 
-**DOMNULUI PREŞEDINTE AL CONSILIULUI NAŢIONAL PENTRU COMBATEREA DISCRIMINĂRII**
+**DOMNULUI PREȘEDINTE AL CONSILIULUI NAȚIONAL PENTRU COMBATEREA DISCRIMINĂRII**
