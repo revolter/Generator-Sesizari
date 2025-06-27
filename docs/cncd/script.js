@@ -447,7 +447,7 @@ async function generatePDF(event) {
         const replacements = {
             '{NUME}': values.nume,
             '{ADRESA}': values.adresa,
-            '{REPREZENTANT}': values.reprezentant || '',
+            '{REPREZENTANT}': values.reprezentant || blankSpaces,
             '{DATA_EVENIMENT}': values.data_eveniment,
             '{NUME_RECLAMAT}': values.nume_reclamat,
             '{ADRESA_RECLAMAT}': values.adresa_reclamat,
