@@ -473,8 +473,25 @@ async function generatePDF(event) {
         // Add signature in the right place
         const signatureImg = document.createElement('img');
         signatureImg.src = signatureDataUrl;
-        signatureImg.className = 'max-w-xs h-auto border border-gray-300 rounded';
+        signatureImg.width = 200;
+        signatureImg.height = 60;
+        signatureImg.className = 'border-b border-black';
         signatureImg.alt = 'Semnătura digitală';
+
+        const h1s = preview.querySelectorAll('h1');
+        h1s.forEach(h1 => {
+            h1.classList.add('text-3xl', 'font-medium');
+        });
+
+        const ols = preview.querySelectorAll('ol');
+        ols.forEach(ol => {
+            ol.classList.add('list-decimal', 'list-inside');
+        });
+
+        const uls = preview.querySelectorAll('ul');
+        uls.forEach(ul => {
+            ul.classList.add('list-disc', 'list-inside');
+        });
 
         // Replace underline placeholder for signature with image
         const signatureNode = preview.querySelector('#semnatura');
