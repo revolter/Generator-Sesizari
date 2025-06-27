@@ -440,6 +440,9 @@ async function generatePDF(event) {
             throw new Error('Template-ul este gol sau nu a putut fi încărcat');
         }
 
+        const blankSpace = '.';
+        const blankSpaces = blankSpace.repeat(10);
+
         // Replace variables with form values
         const replacements = {
             '{NUME}': values.nume,
@@ -450,7 +453,7 @@ async function generatePDF(event) {
             '{ADRESA_RECLAMAT}': values.adresa_reclamat,
             '{DESCRIERE}': values.descriere,
             '{DOVEZI}': values.dovezi,
-            '{ARTICOLE}': values.articole || '..........',
+            '{ARTICOLE}': values.articole || blankSpaces,
             '{DATA}': new Date().toLocaleDateString('ro-RO'),
             '{SEMNATURA}': '' // Will be added as image
         };
