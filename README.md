@@ -6,7 +6,7 @@ Un generator web pentru crearea și descărcarea formularelor de sesizare pentru
 
 ## 📋 Descriere
 
-Acest proiect oferă o interfață web modernă și accesibilă pentru generarea automată a formularelor de sesizare pentru diferite instituții publice românești. Utilizatorii pot completa formulare interactive și pot descărca direct documente PDF complete cu semnătura electronică inclusă.
+Acest proiect oferă o interfață web modernă și accesibilă pentru generarea automată a formularelor de sesizare pentru diferite instituții publice românești. Utilizatorii pot completa formulare interactive și pot descărca direct documente PDF complete cu semnătura digitală inclusă.
 
 ### 🏛️ Instituții suportate
 
@@ -17,7 +17,7 @@ Acest proiect oferă o interfață web modernă și accesibilă pentru generarea
 ### 🌟 Caracteristici principale
 
 - **Formulare interactive** cu validare în timp real
-- **Semnătură electronică** desenată direct în browser
+- **Semnătură digitală** desenată direct în browser
 - **Generare PDF automată** cu template-uri oficiale
 - **Link-uri permanente** pentru partajarea formularelor precompletate
 - **Interfață accesibilă** cu suport pentru screen readers
