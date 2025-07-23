@@ -130,7 +130,10 @@
                                 class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors"
                                 placeholder="ex: Av. Ionescu Maria, Str. Avocatului nr. 3, București"
                                 maxlength="200"
-                                aria-describedby="reprezentant-help">
+                                aria-describedby="reprezentant-help"
+                                readonly
+                                onfocus="this.removeAttribute('readonly')"
+                                onblur="this.setAttribute('readonly', '')">
                             <div id="reprezentant-help" class="text-sm text-gray-600 mt-1">
                                 Pentru situația în care petentul/a este reprezentat(ă) legal este necesară atașarea unei împuterniciri
                             </div>
