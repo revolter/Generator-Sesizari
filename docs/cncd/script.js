@@ -116,7 +116,7 @@ function highlightField(fieldId, hasError) {
         if (helpElement) {
             helpElement.classList.add('text-red-600');
             helpElement.classList.remove('text-gray-600');
-            helpElement.textContent = `Eroare: ${getErrorMessage(fieldId)}`;
+            helpElement.innerHTML = `Eroare: ${getErrorMessage(fieldId)}`;
         }
     } else {
         field.classList.remove('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
@@ -168,8 +168,8 @@ function restoreHelpText(fieldId) {
     if (helpElement) {
         // Get the original help text from the data-original-text attribute
         // If not set, use the current text content as fallback
-        const originalText = helpElement.getAttribute('data-original-text') || helpElement.textContent;
-        helpElement.textContent = originalText;
+        const originalText = helpElement.getAttribute('data-original-text') || helpElement.innerHTML;
+        helpElement.innerHTML = originalText;
     }
 }
 
@@ -674,7 +674,7 @@ function initializeHelpText() {
     helpElements.forEach(element => {
         // Store the original text content if not already stored
         if (!element.getAttribute('data-original-text')) {
-            element.setAttribute('data-original-text', element.textContent);
+            element.setAttribute('data-original-text', element.innerHTML);
         }
     });
 }
