@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Index linkuri scurte pentru sesizări CNCD - Alege și accesează rapid sesizări precompletate.">
+    <title>Generator Sesizări - Index Sesizări CNCD - Linkuri scurte</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script type="text/tailwindjs">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#007bff',
+                        'primary-dark': '#0056b3',
+                        secondary: '#6c757d',
+                        success: '#28a745',
+                        danger: '#dc3545',
+                        warning: '#ffc107',
+                        info: '#17a2b8'
+                    },
+                    maxWidth: {
+                        'form': '800px'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header (now with link) -->
+        <header class="text-center mb-12">
+            <a href="../index.html" class="inline-block focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    Generator Sesizări
+                </h1>
+            </a>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Generator web pentru crearea și descărcarea formularelor de sesizare pentru instituții publice din România
+            </p>
+        </header>
+
+        <section class="max-w-4xl mx-auto flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200" role="banner">
+            <h2 class="text-2xl font-bold text-gray-900">Listă sesizări CNCD precompletate</h2>
+        </section>
+
+        <main class="max-w-2xl mx-auto flex flex-col gap-8" role="main">
+            <section aria-labelledby="short-links-heading">
+                <h2 id="short-links-heading" class="sr-only">Linkuri scurte sesizări CNCD</h2>
+                <ul class="space-y-6">
+                    <li class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col gap-1">
+                        <div class="flex items-center justify-between gap-2 w-full">
+                            <a href="2025-06-27-absorbante-brasov-transilvania365/" class="text-lg font-semibold text-blue-700 hover:underline">
+                                2025-06-27: Absorbante gratuite - Transilvania365
+                            </a>
+                            <div class="flex gap-2">
+                                <button type="button" class="copy-btn px-2 py-1 bg-gray-200 hover:bg-blue-100 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors cursor-pointer" data-url="https://generator-sesizari.ro/cncd/short/2025-06-27-absorbante-brasov-transilvania365/" aria-label="Copiază linkul direct" onclick="copyShortUrl(this)">🔗</button>
+                                <button type="button" class="copy-btn px-2 py-1 bg-gray-200 hover:bg-blue-100 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors cursor-pointer" data-copytext="📋 generator-sesizari.ro > CNCD > Precompletate > 2025-06-27: Absorbante gratuite - Transilvania365" aria-label="Copiază instrucțiunea de navigare" onclick="copyInstruction(this)">📋</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col gap-1">
+                        <div class="flex items-center justify-between gap-2 w-full">
+                            <a href="2025-07-12-absorbante-brasov-gazeta-brasovului/" class="text-lg font-semibold text-blue-700 hover:underline">
+                                2025-07-12: Absorbante gratuite - Gazeta Brașovului
+                            </a>
+                            <div class="flex gap-2">
+                                <button type="button" class="copy-btn px-2 py-1 bg-gray-200 hover:bg-blue-100 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors cursor-pointer" data-url="https://generator-sesizari.ro/cncd/short/2025-07-12-absorbante-brasov-gazeta-brasovului/" aria-label="Copiază linkul direct" onclick="copyShortUrl(this)">🔗</button>
+                                <button type="button" class="copy-btn px-2 py-1 bg-gray-200 hover:bg-blue-100 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors cursor-pointer" data-copytext="📋 generator-sesizari.ro > CNCD > Precompletate > 2025-07-12: Absorbante gratuite - Gazeta Brașovului" aria-label="Copiază instrucțiunea de navigare" onclick="copyInstruction(this)">📋</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <div class="text-center">
+                <a href="../index.html" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors font-semibold">Înapoi la generatorul principal</a>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 pt-8 border-t border-gray-200">
+            <p class="text-gray-600">
+                <a href="https://github.com/revolter/Generator-Sesizari"
+                   class="text-blue-600 hover:underline"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    GitHub<!--
+                --></a> • Făcut cu ❤️ pentru comunitatea română
+            </p>
+        </footer>
+    </div>
+    <script>
+    function copyWithFeedback(btn, text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const original = btn.innerHTML;
+            btn.innerHTML = '✅';
+            btn.classList.add('bg-green-100','text-green-700');
+            btn.classList.remove('bg-gray-200','text-gray-700');
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.remove('bg-green-100','text-green-700');
+                btn.classList.add('bg-gray-200','text-gray-700');
+            }, 1200);
+        });
+    }
+    function copyShortUrl(btn) {
+        copyWithFeedback(btn, btn.getAttribute('data-url'));
+    }
+    function copyInstruction(btn) {
+        copyWithFeedback(btn, btn.getAttribute('data-copytext'));
+    }
+    </script>
+</body>
+</html>
