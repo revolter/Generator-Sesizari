@@ -522,7 +522,7 @@ async function generatePDF(event) {
             `Bună ziua,\n\nVă transmit, atașat, sesizarea completată și semnată privind o posibilă faptă de discriminare.\n\nVă rog să confirmați primirea și să-mi comunicați numărul de înregistrare.\n\nCu stimă,\n${values.nume}`
         );
 
-        document.getElementById('gmail-link').href = `https://mail.google.com/mail/?view=cm&fs=1&to=support@cncd.ro&su=${subject}&body=${body}`;
+        document.getElementById('gmail-link').href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
         document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
 
         const emailLinks = document.getElementById('email-links');
