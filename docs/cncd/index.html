@@ -175,7 +175,10 @@
                                 placeholder="ex: Inspectoratul Școlar Județean"
                                 minlength="2"
                                 maxlength="150"
-                                aria-describedby="nume_reclamat-help">
+                                aria-describedby="nume_reclamat-help"
+                                readonly
+                                onfocus="this.removeAttribute('readonly')"
+                                onblur="this.setAttribute('readonly', '')">
                             <div id="nume_reclamat-help" class="text-sm text-gray-600 mt-1">Introduceți numele persoanei sau instituției reclamate (cel puțin 2 caractere)</div>
                         </div>
 
@@ -193,7 +196,10 @@
                                 placeholder="ex: Str. Exemplu nr. 2, București"
                                 minlength="10"
                                 maxlength="200"
-                                aria-describedby="adresa_reclamat-help">
+                                aria-describedby="adresa_reclamat-help"
+                                readonly
+                                onfocus="this.removeAttribute('readonly')"
+                                onblur="this.setAttribute('readonly', '')">
                             <div id="adresa_reclamat-help" class="text-sm text-gray-600 mt-1">Introduceți adresa completă a instituției/persoanei reclamate (cel puțin 10 caractere)</div>
                         </div>
                     </fieldset>
