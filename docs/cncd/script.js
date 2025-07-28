@@ -573,9 +573,21 @@ async function generatePDF(event) {
 
         // Set and display email links
         const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
-        const body = encodeURIComponent(
-            `Bună ziua,\n\nVă transmit, atașat, sesizarea completată și semnată privind o posibilă faptă de discriminare.\n\nVă rog să confirmați primirea și să-mi comunicați numărul de înregistrare.\n\nCu stimă,\n${values.nume}`
-        );
+        
+        // Load email template with error handling
+        const emailTemplateResponse = await fetch('email-template.txt');
+        if (!emailTemplateResponse.ok) {
+            throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
+        }
+        
+        let emailTemplate = await emailTemplateResponse.text();
+        if (!emailTemplate) {
+            throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
+        }
+        
+        // Replace variables in email template
+        const emailBody = emailTemplate.replace('{NUME}', values.nume);
+        const body = encodeURIComponent(emailBody);
 
         const gmailLink = document.getElementById('gmail-link');
         gmailLink.href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
