@@ -429,15 +429,15 @@ async function generatePDF(event) {
     submitButton.setAttribute('aria-busy', 'true');
 
     try {
-        // Load Markdown template with error handling
-        const templateResponse = await fetch('template.md');
-        if (!templateResponse.ok) {
-            throw new Error(`Eroare la încărcarea template-ului: ${templateResponse.status} ${templateResponse.statusText}`);
+        // Load complaint template with error handling
+        const complaintTemplateResponse = await fetch('complaint-template.md');
+        if (!complaintTemplateResponse.ok) {
+            throw new Error(`Eroare la încărcarea template-ului de sesizare: ${complaintTemplateResponse.status} ${complaintTemplateResponse.statusText}`);
         }
 
-        let template = await templateResponse.text();
-        if (!template) {
-            throw new Error('Template-ul este gol sau nu a putut fi încărcat');
+        let complaintTemplate = await complaintTemplateResponse.text();
+        if (!complaintTemplate) {
+            throw new Error('Template-ul de sesizare este gol sau nu a putut fi încărcat');
         }
 
         const blankSpace = '.';
@@ -459,16 +459,16 @@ async function generatePDF(event) {
         };
 
         Object.keys(replacements).forEach(key => {
-            template = template.replace(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replacements[key]);
+            complaintTemplate = complaintTemplate.replace(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replacements[key]);
         });
 
-        const htmlContent = marked.parse(template);
+        const htmlComplaintContent = marked.parse(complaintTemplate);
 
-        const preview = document.getElementById('preview');
-        preview.innerHTML = htmlContent;
-        preview.classList.remove('hidden');
-        preview.classList.add('block');
-        preview.setAttribute('aria-hidden', 'false');
+        const complaintPreview = document.getElementById('preview');
+        complaintPreview.innerHTML = htmlComplaintContent;
+        complaintPreview.classList.remove('hidden');
+        complaintPreview.classList.add('block');
+        complaintPreview.setAttribute('aria-hidden', 'false');
 
         // Add signature in the right place
         const signatureImg = document.createElement('img');
@@ -478,23 +478,23 @@ async function generatePDF(event) {
         signatureImg.className = 'border-b border-black';
         signatureImg.alt = 'Semnătura digitală';
 
-        const h1s = preview.querySelectorAll('h1');
+        const h1s = complaintPreview.querySelectorAll('h1');
         h1s.forEach(h1 => {
             h1.classList.add('text-3xl', 'font-medium');
         });
 
-        const ols = preview.querySelectorAll('ol');
+        const ols = complaintPreview.querySelectorAll('ol');
         ols.forEach(ol => {
             ol.classList.add('list-decimal', 'list-inside');
         });
 
-        const uls = preview.querySelectorAll('ul');
+        const uls = complaintPreview.querySelectorAll('ul');
         uls.forEach(ul => {
             ul.classList.add('list-disc', 'list-inside');
         });
 
         // Replace underline placeholder for signature with image
-        const signatureNode = preview.querySelector('#semnatura');
+        const signatureNode = complaintPreview.querySelector('#semnatura');
         if (signatureNode) {
             signatureNode.appendChild(signatureImg);
         }
@@ -504,7 +504,7 @@ async function generatePDF(event) {
 
         // Generate PDF as blob
         const pdfBlob = await html2pdf()
-            .from(preview)
+            .from(complaintPreview)
             .set({
                 pagebreak: { mode: ['avoid-all'] },
                 margin: 1,
@@ -567,24 +567,24 @@ async function generatePDF(event) {
             URL.revokeObjectURL(blobUrl);
         }, 60000); // Keep for 1 minute
 
-        preview.classList.add('hidden');
-        preview.classList.remove('block');
-        preview.setAttribute('aria-hidden', 'true');
+        complaintPreview.classList.add('hidden');
+        complaintPreview.classList.remove('block');
+        complaintPreview.setAttribute('aria-hidden', 'true');
 
         // Set and display email links
         const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
-        
+
         // Load email template with error handling
         const emailTemplateResponse = await fetch('email-template.txt');
         if (!emailTemplateResponse.ok) {
             throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
         }
-        
+
         let emailTemplate = await emailTemplateResponse.text();
         if (!emailTemplate) {
             throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
         }
-        
+
         // Replace variables in email template
         const emailBody = emailTemplate.replace('{NUME}', values.nume);
         const body = encodeURIComponent(emailBody);
