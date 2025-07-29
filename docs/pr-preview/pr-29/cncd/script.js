@@ -551,6 +551,7 @@ async function generatePDF(event) {
         const emailLinks = document.getElementById('email-links');
         emailLinks.classList.remove('hidden');
         emailLinks.classList.add('block');
+        emailLinks.style.display = 'block'; // Fallback for when CSS framework doesn't load
         emailLinks.setAttribute('aria-hidden', 'false');
 
         announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt disponibile.');
