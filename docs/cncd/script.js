@@ -519,19 +519,26 @@ async function generatePDF(event) {
         const nume = encodeURIComponent(values.nume);
         const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
 
-        // Load email template with error handling
-        const emailTemplateResponse = await fetch('email-template.txt');
-        if (!emailTemplateResponse.ok) {
-            throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
+        // Load email template with fallback to hardcoded version
+        let emailBody;
+        try {
+            const emailTemplateResponse = await fetch('email-template.txt');
+            if (emailTemplateResponse.ok) {
+                const emailTemplate = await emailTemplateResponse.text();
+                if (emailTemplate) {
+                    emailBody = emailTemplate.replace('{NUME}', values.nume);
+                } else {
+                    throw new Error('Template empty');
+                }
+            } else {
+                throw new Error('Template not found');
+            }
+        } catch (error) {
+            console.warn('Email template loading failed, using fallback:', error);
+            // Fallback to hardcoded email body
+            emailBody = `Bună ziua,\n\nVă transmit, atașat, sesizarea completată și semnată privind o posibilă faptă de discriminare.\n\nVă rog să confirmați primirea și să-mi comunicați numărul de înregistrare.\n\nCu stimă,\n${values.nume}`;
         }
 
-        let emailTemplate = await emailTemplateResponse.text();
-        if (!emailTemplate) {
-            throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
-        }
-
-        // Replace variables in email template
-        const emailBody = emailTemplate.replace('{NUME}', values.nume);
         const body = encodeURIComponent(emailBody);
 
         const gmailLink = document.getElementById('gmail-link');
@@ -551,7 +558,6 @@ async function generatePDF(event) {
         const emailLinks = document.getElementById('email-links');
         emailLinks.classList.remove('hidden');
         emailLinks.classList.add('block');
-        emailLinks.style.display = 'block'; // Fallback for when CSS framework doesn't load
         emailLinks.setAttribute('aria-hidden', 'false');
 
         announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt disponibile.');
