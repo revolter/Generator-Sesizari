@@ -1,133 +1,226 @@
 <!DOCTYPE html>
 <html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generator web pentru crearea și descărcarea formularelor de sesizare pentru instituții publice din România.">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Generator web pentru crearea și descărcarea formularelor de sesizare pentru instituții publice din România."
+    />
     <title>Generator Sesizări - Instituții Publice Române</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script type="text/tailwindjs">
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#007bff',
-                        'primary-dark': '#0056b3',
-                        secondary: '#6c757d',
-                        success: '#28a745',
-                        danger: '#dc3545',
-                        warning: '#ffc107',
-                        info: '#17a2b8'
-                    },
-                    maxWidth: {
-                        'form': '800px'
-                    }
-                }
-            }
-        }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="utils.js"></script>
+    <script>
+      // Fixes dark mode flicker by setting .dark before CSS loads
+      (function () {
+        try {
+          var dark = localStorage.getItem("darkMode");
+          if (
+            dark === "true" ||
+            (dark === null &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
     </script>
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header (now with link) -->
-        <header class="text-center mb-12">
-            <a href="index.html" class="inline-block focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">
-                    Generator Sesizări
-                </h1>
-            </a>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                Generator web pentru crearea și descărcarea formularelor de sesizare pentru instituții publice din România
-            </p>
-        </header>
-
-        <!-- Main Content -->
-        <main class="max-w-4xl mx-auto">
-            <!-- Available Institutions -->
-            <section class="max-w-4xl mx-auto flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200" role="banner">
-                <h2 class="text-2xl font-bold text-gray-900">Instituții Disponibile</h2>
-            </section>
-
-            <section class="mb-12 grid md:grid-cols-2 gap-6">
-                <!-- CNCD -->
-                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-blue-600 font-bold text-lg">CN</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">CNCD</h3>
-                            <p class="text-gray-600">Consiliul Național pentru Combaterea Discriminării</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 mb-4">
-                        Depune o petiție pentru combaterea discriminării și promovarea egalității de șanse.
-                    </p>
-                    <a href="cncd/"
-                        class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        Accesează formularul →
-                    </a>
-                </div>
-
-                <!-- CDEP (WIP) -->
-                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 opacity-75">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-gray-500 font-bold text-lg">CD</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">CDEP</h3>
-                            <p class="text-gray-600">Camera Deputaților</p>
-                            <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mt-1">
-                                În dezvoltare
-                            </span>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 mb-4">
-                        Formular pentru depunerea de sesizări la Camera Deputaților.
-                    </p>
-                    <button disabled
-                            class="inline-block bg-gray-300 text-gray-500 px-6 py-2 rounded-lg cursor-not-allowed font-medium cursor-pointer">
-                        În curând
-                    </button>
-                </div>
-            </section>
-
-            <!-- Info Section -->
-            <section class="bg-blue-50 rounded-lg p-6 mb-8">
-                <h3 class="text-lg font-semibold text-blue-800 mb-3">
-                    ℹ️ Informații importante
-                </h3>
-                <ul class="text-blue-700 space-y-2">
-                    <li>• Toate datele sunt procesate local în browser - nu se salvează pe server</li>
-                    <li>• Formularele sunt generate conform template-urilor oficiale</li>
-                    <li>• Include semnătură digitală desenată direct în browser</li>
-                    <li>• Suport complet pentru accesibilitate (WCAG 2.1)</li>
-                </ul>
-            </section>
-
-            <!-- Disclaimer -->
-            <section class="bg-yellow-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-yellow-800 mb-3">
-                    ⚠️ Disclaimer
-                </h3>
-                <p class="text-yellow-700">
-                    Acest generator este oferit cu titlu informativ. Răspunderea pentru corectitudinea și veridicitatea datelor completate aparține exclusiv persoanei care folosește formularul. Pentru detalii oficiale, consultați paginile oficiale ale instituțiilor respective.
-                </p>
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer class="text-center mt-12 pt-8 border-t border-gray-200">
-            <p class="text-gray-600">
-                <a href="https://github.com/revolter/Generator-Sesizari"
-                   class="text-blue-600 hover:underline"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    GitHub<!--
-                --></a> • Făcut cu ❤️ pentru comunitatea română
-            </p>
-        </footer>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#007bff",
+              "primary-dark": "#0056b3",
+              secondary: "#6c757d",
+              success: "#28a745",
+              danger: "#dc3545",
+              warning: "#ffc107",
+              info: "#17a2b8",
+            },
+            maxWidth: {
+              form: "800px",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="w-full flex justify-end p-2 h-14">
+      <button
+        id="darkModeToggle"
+        class="block px-4 py-2 w-[164px] rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white shadow-lg flex justify-center items-center gap-2"
+        aria-label="Comută modul întunecat"
+      >
+        <span id="darkModeIcon" class="w-5 h-5"></span>
+        <span
+          id="darkModeText"
+          class="hidden sm:inline justify-self-end"
+        ></span>
+      </button>
     </div>
-</body>
+    <div class="container mx-auto px-4 py-8">
+      <!-- Header -->
+      <header class="text-center mb-12">
+        <a
+          href="index.html"
+          class="inline-block focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+        >
+          <h1 class="text-4xl font-bold text-gray-800 mb-4 dark:text-gray-100">
+            Generator Sesizări
+          </h1>
+        </a>
+        <div class="relative"></div>
+
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
+          Generator web pentru crearea și descărcarea formularelor de sesizare
+          pentru instituții publice din România
+        </p>
+      </header>
+
+      <!-- Main Content -->
+      <main class="max-w-4xl mx-auto">
+        <!-- Available Institutions -->
+        <section
+          class="max-w-4xl mx-auto flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200 dark:border-gray-700"
+          role="banner"
+        >
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            Instituții Disponibile
+          </h2>
+        </section>
+
+        <section class="mb-12 grid md:grid-cols-2 gap-6">
+          <!-- CNCD -->
+          <div
+            class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4 dark:bg-blue-900"
+              >
+                <span class="text-blue-600 font-bold text-lg dark:text-blue-200"
+                  >CN</span
+                >
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-semibold text-gray-800 dark:text-gray-100"
+                >
+                  CNCD
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  Consiliul Național pentru Combaterea Discriminării
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4 dark:text-gray-200">
+              Depune o petiție pentru combaterea discriminării și promovarea
+              egalității de șanse.
+            </p>
+            <a
+              href="cncd/"
+              class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium dark:bg-blue-700 dark:hover:bg-blue-800"
+            >
+              Accesează formularul →
+            </a>
+          </div>
+
+          <!-- CDEP (WIP) -->
+          <div
+            class="bg-white rounded-lg shadow-md p-6 border border-gray-200 opacity-75 dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 dark:bg-gray-700"
+              >
+                <span class="text-gray-500 font-bold text-lg dark:text-gray-300"
+                  >CD</span
+                >
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-semibold text-gray-800 dark:text-gray-100"
+                >
+                  CDEP
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  Camera Deputaților
+                </p>
+                <span
+                  class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mt-1 dark:bg-yellow-900 dark:text-yellow-300"
+                >
+                  În dezvoltare
+                </span>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4 dark:text-gray-200">
+              Formular pentru depunerea de sesizări la Camera Deputaților.
+            </p>
+            <button
+              disabled
+              class="inline-block bg-gray-300 text-gray-500 px-6 py-2 rounded-lg cursor-not-allowed font-medium cursor-pointer dark:bg-gray-700 dark:text-gray-400"
+            >
+              În curând
+            </button>
+          </div>
+        </section>
+
+        <!-- Info Section -->
+        <section class="bg-blue-50 rounded-lg p-6 mb-8 dark:bg-blue-950">
+          <h3
+            class="text-lg font-semibold text-blue-800 mb-3 dark:text-blue-200"
+          >
+            ℹ️ Informații importante
+          </h3>
+          <ul class="text-blue-700 space-y-2 dark:text-blue-200">
+            <li>
+              • Toate datele sunt procesate local în browser - nu se salvează pe
+              server
+            </li>
+            <li>
+              • Formularele sunt generate conform template-urilor oficiale
+            </li>
+            <li>• Include semnătură digitală desenată direct în browser</li>
+            <li>• Suport complet pentru accesibilitate (WCAG 2.1)</li>
+          </ul>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="bg-yellow-50 rounded-lg p-6 dark:bg-yellow-950">
+          <h3
+            class="text-lg font-semibold text-yellow-800 mb-3 dark:text-yellow-200"
+          >
+            ⚠️ Disclaimer
+          </h3>
+          <p class="text-yellow-700 dark:text-yellow-100">
+            Acest generator este oferit cu titlu informativ. Răspunderea pentru
+            corectitudinea și veridicitatea datelor completate aparține exclusiv
+            persoanei care folosește formularul. Pentru detalii oficiale,
+            consultați paginile oficiale ale instituțiilor respective.
+          </p>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer
+        class="text-center mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
+      >
+        <p class="text-gray-600 dark:text-gray-300">
+          <a
+            href="https://github.com/revolter/Generator-Sesizari"
+            class="text-blue-600 hover:underline dark:text-blue-400"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub<!--
+              --></a
+          >
+          • Făcut cu ❤️ pentru comunitatea română
+        </p>
+      </footer>
+    </div>
+  </body>
 </html>

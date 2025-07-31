@@ -298,7 +298,8 @@ function draw(e) {
 
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#222';
+    // Added signature contrast color for dark mode toggle
+    ctx.strokeStyle = document.documentElement.classList.contains("dark") ? "#fff" : "#222";
     ctx.beginPath();
 
     if (wasOutside) {
