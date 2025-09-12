@@ -500,16 +500,37 @@ async function generatePDF(event) {
         }
 
         // Create PDF document with error handling
-        await html2pdf()
+        const filename = `Sesizare_CNCD_${values.nume_reclamat.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+        
+        // Generate PDF as blob and open in new tab to avoid navigation issues in Safari iOS
+        const pdfBlob = await html2pdf()
             .from(preview)
             .set({
                 pagebreak: { mode: ['avoid-all'] },
                 margin: 1,
-                filename: `Sesizare_CNCD_${values.nume_reclamat.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`,
+                filename: filename,
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             })
-            .save();
+            .output('blob');
+
+        // Create blob URL and open in new tab
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        const newTab = window.open(blobUrl, '_blank');
+        
+        // Fallback: if new tab was blocked, create download link
+        if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
+            // Create download link as fallback
+            const downloadLink = document.createElement('a');
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename;
+            downloadLink.click();
+        }
+        
+        // Clean up blob URL after a delay to allow download/viewing
+        setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+        }, 60000); // Keep for 1 minute
 
         preview.classList.add('hidden');
         preview.classList.remove('block');
