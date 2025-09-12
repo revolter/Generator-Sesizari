@@ -526,22 +526,9 @@ async function generatePDF(event) {
         gmailLink.href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
         document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
 
-        // Hide Gmail link on mobile devices
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-        if (isMobileDevice()) {
-            gmailLink.style.display = 'none';
-        } else {
-            gmailLink.style.display = '';
-        }
-
         const emailLinks = document.getElementById('email-links');
-        emailLinks.classList.remove('hidden');
-        emailLinks.classList.add('block');
-        emailLinks.setAttribute('aria-hidden', 'false');
-
-        announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt disponibile.');
+        
+        announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt actualizate cu informațiile din formular.');
 
         emailLinks.scrollIntoView({
             behavior: 'smooth',
@@ -696,6 +683,15 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeForm();
     addRealTimeValidation();
     addKeyboardNavigation();
+
+    // Hide Gmail link on mobile devices since deep links don't work
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    if (isMobileDevice()) {
+        const gmailLink = document.getElementById('gmail-link');
+        gmailLink.style.display = 'none';
+    }
 
     // Announce page load to screen readers
     announceToScreenReader('Formular de sesizare CNCD încărcat. Completează câmpurile pentru a genera o sesizare.');
