@@ -537,11 +537,8 @@ async function generatePDF(event) {
         }
 
         const emailLinks = document.getElementById('email-links');
-        emailLinks.classList.remove('hidden');
-        emailLinks.classList.add('block');
-        emailLinks.setAttribute('aria-hidden', 'false');
-
-        announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt disponibile.');
+        
+        announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt actualizate cu informațiile din formular.');
 
         emailLinks.scrollIntoView({
             behavior: 'smooth',
