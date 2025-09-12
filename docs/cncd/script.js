@@ -514,8 +514,11 @@ async function generatePDF(event) {
             })
             .output('blob');
 
+        // Create new blob with application/octet-stream MIME type for Safari mobile compatibility
+        const safariCompatibleBlob = new Blob([pdfBlob], { type: 'application/octet-stream' });
+        
         // Create blob URL and open in new tab
-        const blobUrl = URL.createObjectURL(pdfBlob);
+        const blobUrl = URL.createObjectURL(safariCompatibleBlob);
         const newTab = window.open(blobUrl, '_blank');
         
         // Fallback: if new tab was blocked, create download link
