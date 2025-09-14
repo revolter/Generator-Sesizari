@@ -502,7 +502,7 @@ async function generatePDF(event) {
         // Create PDF document with error handling
         const filename = `Sesizare_CNCD_${values.nume_reclamat.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
         
-        // Generate PDF as blob and open in new tab to avoid navigation issues in Safari iOS
+        // Generate PDF as blob 
         const pdfBlob = await html2pdf()
             .from(preview)
             .set({
@@ -514,20 +514,29 @@ async function generatePDF(event) {
             })
             .output('blob');
 
-        // Create new blob with application/octet-stream MIME type for Safari mobile compatibility
-        const safariCompatibleBlob = new Blob([pdfBlob], { type: 'application/octet-stream' });
+        // Create proper PDF blob with correct MIME type
+        const properPdfBlob = new Blob([pdfBlob], { type: 'application/pdf' });
         
-        // Create blob URL and open in new tab
-        const blobUrl = URL.createObjectURL(safariCompatibleBlob);
-        const newTab = window.open(blobUrl, '_blank');
+        // Create blob URL
+        const blobUrl = URL.createObjectURL(properPdfBlob);
         
-        // Fallback: if new tab was blocked, create download link
-        if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
-            // Create download link as fallback
-            const downloadLink = document.createElement('a');
-            downloadLink.href = blobUrl;
-            downloadLink.download = filename;
-            downloadLink.click();
+        // Primary approach: Use download link with proper filename
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = filename;
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Fallback for browsers that support viewing PDFs: open in new tab
+        // This provides better UX on desktop browsers
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (!isMobile) {
+            // On desktop, also try to open in new tab for viewing
+            setTimeout(() => {
+                window.open(blobUrl, '_blank');
+            }, 100);
         }
         
         // Clean up blob URL after a delay to allow download/viewing
