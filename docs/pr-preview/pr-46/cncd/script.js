@@ -514,29 +514,48 @@ async function generatePDF(event) {
             })
             .output('blob');
 
-        // Create proper PDF blob with correct MIME type
-        const properPdfBlob = new Blob([pdfBlob], { type: 'application/pdf' });
-        
-        // Create blob URL
-        const blobUrl = URL.createObjectURL(properPdfBlob);
-        
-        // Primary approach: Use download link with proper filename
-        const downloadLink = document.createElement('a');
-        downloadLink.href = blobUrl;
-        downloadLink.download = filename;
-        downloadLink.style.display = 'none';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        // Fallback for browsers that support viewing PDFs: open in new tab
-        // This provides better UX on desktop browsers
+        // Detect device type for optimal PDF handling
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (!isMobile) {
-            // On desktop, also try to open in new tab for viewing
-            setTimeout(() => {
-                window.open(blobUrl, '_blank');
-            }, 100);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isChrome = /chrome/i.test(navigator.userAgent) && !/edg/i.test(navigator.userAgent);
+        
+        // Safari mobile needs application/octet-stream to open PDFs in new tab (issue #43)
+        // Chrome mobile needs application/pdf with download attribute for proper filename (issue #45)
+        let finalBlob, blobUrl;
+        
+        if (isMobile && isSafari) {
+            // Safari mobile: use octet-stream and open in new tab
+            finalBlob = new Blob([pdfBlob], { type: 'application/octet-stream' });
+            blobUrl = URL.createObjectURL(finalBlob);
+            const newTab = window.open(blobUrl, '_blank');
+            
+            // Fallback if new tab was blocked
+            if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = blobUrl;
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        } else {
+            // Chrome mobile and desktop: use application/pdf with download link
+            finalBlob = new Blob([pdfBlob], { type: 'application/pdf' });
+            blobUrl = URL.createObjectURL(finalBlob);
+            
+            // Primary: download link for proper filename
+            const downloadLink = document.createElement('a');
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename;
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Desktop additional UX: also open in new tab for viewing
+            if (!isMobile) {
+                setTimeout(() => {
+                    window.open(blobUrl, '_blank');
+                }, 100);
+            }
         }
         
         // Clean up blob URL after a delay to allow download/viewing
