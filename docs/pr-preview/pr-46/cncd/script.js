@@ -514,10 +514,15 @@ async function generatePDF(event) {
             })
             .output('blob');
 
-        // Detect device type for optimal PDF handling
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        const isChrome = /chrome/i.test(navigator.userAgent) && !/edg/i.test(navigator.userAgent);
+        // Detect device and browser type for optimal PDF handling
+        // Use UAParser for accurate detection
+        const parser = new UAParser();
+        const device = parser.getDevice();
+        const browser = parser.getBrowser();
+        
+        const isMobile = device.type === 'mobile' || device.type === 'tablet';
+        const isSafari = browser.name === 'Safari' || browser.name === 'Mobile Safari';
+        const isChrome = browser.name === 'Chrome' || browser.name === 'Mobile Chrome';
         
         // Safari mobile needs application/octet-stream to open PDFs in new tab (issue #43)
         // Chrome mobile needs application/pdf with download attribute for proper filename (issue #45)
