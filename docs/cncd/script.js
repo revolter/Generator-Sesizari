@@ -522,7 +522,7 @@ async function generatePDF(event) {
         
         const isMobile = device.type === 'mobile' || device.type === 'tablet';
         const isSafari = browser.name === 'Safari' || browser.name === 'Mobile Safari';
-        const isChrome = browser.name === 'Chrome' || browser.name === 'Chrome Mobile';
+        const isChrome = browser.name === 'Chrome' || browser.name === 'Mobile Chrome';
         
         // Safari mobile needs application/octet-stream to open PDFs in new tab (issue #43)
         // Chrome mobile needs application/pdf with download attribute for proper filename (issue #45)
