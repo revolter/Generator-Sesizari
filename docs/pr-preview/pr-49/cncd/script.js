@@ -734,63 +734,51 @@ function initializeHelpText() {
     });
 }
 
-// Instagram browser detection and warning
-function detectInstagramBrowser() {
-    try {
-        // Check user agent for Instagram in-app browser patterns
-        const userAgent = navigator.userAgent || '';
-        
-        // Instagram in-app browser typically contains 'Instagram' in the user agent string
-        // Some examples of Instagram user agents:
-        // "Instagram 123.0.0.0.0 (iPhone; iOS 15.0; ...)"
-        // "Mozilla/5.0 ... Instagram ..."
-        return userAgent.includes('Instagram') || 
-               userAgent.includes('FBAN') ||  // Facebook app browser (similar issue)
-               userAgent.includes('FBAV');    // Facebook app browser (similar issue)
-    } catch (error) {
-        console.error('Error detecting Instagram browser:', error);
-        return false;
-    }
+// Meta browser detection and warning
+function detectMetaBrowser() {
+    const parser = new UAParser();
+    
+    // Check if browser is Meta using the is helper
+    return parser.getBrowser().is('Instagram') ||
+           parser.getBrowser().is('Facebook');
 }
 
-function showInstagramWarning() {
-    const warning = document.getElementById('instagram-warning');
+function showMetaWarning() {
+    const warning = document.getElementById('meta-warning');
     const mainContent = document.querySelector('.container');
     
-    if (warning && mainContent) {
-        // Hide main content
-        mainContent.style.display = 'none';
-        
-        // Show warning overlay
-        warning.classList.remove('hidden');
-        warning.setAttribute('aria-hidden', 'false');
-        
-        // Add click handler for continue button
-        const continueBtn = document.getElementById('continue-anyway');
-        if (continueBtn) {
-            continueBtn.addEventListener('click', () => {
-                warning.classList.add('hidden');
-                warning.setAttribute('aria-hidden', 'true');
-                mainContent.style.display = 'block';
-                
-                // Announce to screen readers
-                announceToScreenReader('Avertisment ignorat. Funcționalitatea poate fi limitată în browserul Instagram.');
-            });
-        }
-        
-        // Focus management for accessibility
-        const warningHeading = warning.querySelector('h2');
-        if (warningHeading) {
-            warningHeading.focus();
-        }
+    // Hide main content
+    mainContent.style.display = 'none';
+    
+    // Show warning overlay
+    warning.classList.remove('hidden');
+    warning.setAttribute('aria-hidden', 'false');
+    
+    // Add click handler for continue button
+    const continueBtn = document.getElementById('continue-anyway');
+    if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+            warning.classList.add('hidden');
+            warning.setAttribute('aria-hidden', 'true');
+            mainContent.style.display = 'block';
+            
+            // Announce to screen readers
+            announceToScreenReader('Avertisment ignorat. Funcționalitatea poate fi limitată în browserul Meta.');
+        });
+    }
+    
+    // Focus management for accessibility
+    const warningHeading = warning.querySelector('h2');
+    if (warningHeading) {
+        warningHeading.focus();
     }
 }
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Check for Instagram browser first
-    if (detectInstagramBrowser()) {
-        showInstagramWarning();
+    // Check for Meta browser first
+    if (detectMetaBrowser()) {
+        showMetaWarning();
     }
     initializeHelpText();
     initializeForm();
