@@ -501,8 +501,8 @@ async function generatePDF(event) {
 
         // Create PDF document with error handling
         const filename = `Sesizare_CNCD_${values.nume_reclamat.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-        
-        // Generate PDF as blob 
+
+        // Generate PDF as blob
         const pdfBlob = await html2pdf()
             .from(preview)
             .set({
@@ -519,21 +519,21 @@ async function generatePDF(event) {
         const parser = new UAParser();
         const device = parser.getDevice();
         const browser = parser.getBrowser();
-        
+
         const isMobile = device.type === 'mobile' || device.type === 'tablet';
         const isSafari = browser.name === 'Safari' || browser.name === 'Mobile Safari';
         const isChrome = browser.name === 'Chrome' || browser.name === 'Mobile Chrome';
-        
+
         // Safari mobile needs application/octet-stream to open PDFs in new tab (issue #43)
         // Chrome mobile needs application/pdf with download attribute for proper filename (issue #45)
         let finalBlob, blobUrl;
-        
+
         if (isMobile && isSafari) {
             // Safari mobile: use octet-stream and open in new tab
             finalBlob = new Blob([pdfBlob], { type: 'application/octet-stream' });
             blobUrl = URL.createObjectURL(finalBlob);
             const newTab = window.open(blobUrl, '_blank');
-            
+
             // Fallback if new tab was blocked
             if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
                 const downloadLink = document.createElement('a');
@@ -545,7 +545,7 @@ async function generatePDF(event) {
             // Chrome mobile and desktop: use application/pdf with download link
             finalBlob = new Blob([pdfBlob], { type: 'application/pdf' });
             blobUrl = URL.createObjectURL(finalBlob);
-            
+
             // Primary: download link for proper filename
             const downloadLink = document.createElement('a');
             downloadLink.href = blobUrl;
@@ -554,7 +554,7 @@ async function generatePDF(event) {
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
-            
+
             // Desktop additional UX: also open in new tab for viewing
             if (!isMobile) {
                 setTimeout(() => {
@@ -562,7 +562,7 @@ async function generatePDF(event) {
                 }, 100);
             }
         }
-        
+
         // Clean up blob URL after a delay to allow download/viewing
         setTimeout(() => {
             URL.revokeObjectURL(blobUrl);
@@ -584,7 +584,7 @@ async function generatePDF(event) {
         document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
 
         const emailLinks = document.getElementById('email-links');
-        
+
         announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt actualizate cu informațiile din formular.');
 
         emailLinks.scrollIntoView({
@@ -734,8 +734,52 @@ function initializeHelpText() {
     });
 }
 
+// Meta browser detection and warning
+function detectMetaBrowser() {
+    const parser = new UAParser();
+
+    // Check if browser is Meta using the is helper
+    return parser.getBrowser().is('Instagram') ||
+           parser.getBrowser().is('Facebook');
+}
+
+function showMetaWarning() {
+    const warning = document.getElementById('meta-warning');
+    const mainContent = document.querySelector('.container');
+
+    // Hide main content
+    mainContent.style.display = 'none';
+
+    // Show warning overlay
+    warning.classList.remove('hidden');
+    warning.setAttribute('aria-hidden', 'false');
+
+    // Add click handler for continue button
+    const continueBtn = document.getElementById('continue-anyway');
+    if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+            warning.classList.add('hidden');
+            warning.setAttribute('aria-hidden', 'true');
+            mainContent.style.display = 'block';
+
+            // Announce to screen readers
+            announceToScreenReader('Avertisment ignorat. Funcționalitatea poate fi limitată în browserul Meta.');
+        });
+    }
+
+    // Focus management for accessibility
+    const warningHeading = warning.querySelector('h2');
+    if (warningHeading) {
+        warningHeading.focus();
+    }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Check for Meta browser first
+    if (detectMetaBrowser()) {
+        showMetaWarning();
+    }
     initializeHelpText();
     initializeForm();
     addRealTimeValidation();
