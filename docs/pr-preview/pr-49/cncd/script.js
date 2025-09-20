@@ -736,7 +736,6 @@ function initializeHelpText() {
 
 // Meta browser detection and warning
 function detectMetaBrowser() {
-    return true;
     const parser = new UAParser();
 
     // Check if browser is Meta using the is helper
