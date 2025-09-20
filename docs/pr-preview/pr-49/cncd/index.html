@@ -364,39 +364,43 @@
         </footer>
 
         <div id="preview" class="hidden flex flex-col gap-8" aria-hidden="true" role="document"></div>
-        
-        <!-- Meta Browser Warning Overlay -->
-        <div id="meta-warning" class="hidden fixed inset-0 bg-white z-50 flex items-center justify-center p-4" aria-hidden="true">
-            <!-- Arrow pointing to top-right corner -->
-            <div class="absolute top-6 right-8">
-                <!-- Arrow line -->
-                <div class="w-16 h-0.5 bg-blue-600 transform rotate-45 origin-left mb-1"></div>
-                <!-- Arrow head -->
-                <div class="absolute -top-1 right-0 w-0 h-0 border-l-4 border-b-4 border-l-transparent border-b-blue-600 transform rotate-45"></div>
+    </div>
+
+    <!-- Meta Browser Warning Overlay -->
+    <div id="meta-warning" class="hidden fixed inset-0 bg-white z-50 flex items-center justify-center p-4" aria-hidden="true">
+        <!-- Arrow pointing to top-right corner -->
+        <svg xmlns="http://www.w3.org/2000/svg"
+             shape-rendering="geometricPrecision"
+             text-rendering="geometricPrecision"
+             image-rendering="optimizeQuality"
+             fill-rule="evenodd"
+             clip-rule="evenodd"
+             viewBox="0 0 511.999 414.537"
+             class="absolute top-4 right-4 w-20 h-16 text-blue-600 transform rotate-12">
+            <path fill="currentColor" fill-rule="nonzero" d="M272.672 106.83c35.974-29.622 93.074-70.771 124.026-101.724C404.401.483 413.074-.958 421.124.61c8.291 1.606 15.868 6.316 21.079 13.928l1.587 2.598 68.209 134.816-23.269 11.733c-6.285-12.42-46.018-93.326-61.794-123.347-8.421 113.201-50.941 202.355-119.111 265.333C232.553 375.215 126.272 412.448.41 414.537L0 388.52c119.332-1.982 219.658-36.875 290.177-102.028 64.084-59.205 103.813-143.79 111.061-251.776l-112.032 92.217-16.534-20.103z"/>
+        </svg>
+
+        <!-- Instructions Box -->
+        <div class="bg-white border-2 border-blue-600 rounded-lg p-8 max-w-md text-center shadow-2xl">
+            <div class="mb-6">
+                <span class="text-6xl">📱</span>
             </div>
-            
-            <!-- Instructions Box -->
-            <div class="bg-white border-2 border-blue-600 rounded-lg p-8 max-w-md text-center shadow-2xl">
-                <div class="mb-6">
-                    <span class="text-6xl">📱</span>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                    Deschide în browserul extern
-                </h2>
-                <p class="text-gray-700 mb-6 leading-relaxed">
-                    Pentru a descărca formularele, te rugăm să deschizi această pagină într-un browser extern.
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                Deschide în browserul extern
+            </h2>
+            <p class="text-gray-700 mb-6 leading-relaxed">
+                Pentru a descărca sesizarea, te rugăm să deschizi această pagină într-un browser extern.
+            </p>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p class="text-sm text-blue-800">
+                    <strong>1.</strong> Apasă pe meniul <strong>"..."</strong> din colțul din dreapta-sus<br>
+                    <strong>2.</strong> Selectează <strong>"Deschide în browserul extern"</strong>
+                    <span class="inline-block ml-1">↗️</span>
                 </p>
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                    <p class="text-sm text-blue-800">
-                        <strong>1.</strong> Apasă pe meniul <strong>"..."</strong> din colțul din dreapta-sus<br>
-                        <strong>2.</strong> Selectează <strong>"Deschide în browserul extern"</strong> 
-                        <span class="inline-block ml-1">↗️</span>
-                    </p>
-                </div>
-                <button id="continue-anyway" class="w-full px-4 py-3 bg-gray-500 text-white font-semibold rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors cursor-pointer">
-                    Continuă oricum (funcționalitatea limitată)
-                </button>
             </div>
+            <button id="continue-anyway" class="w-full px-4 py-3 bg-gray-500 text-white font-semibold rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors cursor-pointer">
+                Continuă oricum (funcționalitatea limitată)
+            </button>
         </div>
     </div>
 
@@ -404,7 +408,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@2.0.5/dist/ua-parser.pack.min.js"></script>
-    <script src="script.js?t=1758014441"></script>
+    <script src="script.js?t=1758378038"></script>
 </body>
 </html>
 
