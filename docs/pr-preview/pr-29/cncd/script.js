@@ -499,6 +499,41 @@ async function generatePDF(event) {
             signatureNode.appendChild(signatureImg);
         }
 
+        complaintPreview.classList.add('hidden');
+        complaintPreview.classList.remove('block');
+        complaintPreview.setAttribute('aria-hidden', 'true');
+
+        // Set and display email links
+        const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
+
+        // Load email template with error handling
+        const emailTemplateResponse = await fetch('email-template.txt');
+        if (!emailTemplateResponse.ok) {
+            throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
+        }
+
+        let emailTemplate = await emailTemplateResponse.text();
+        if (!emailTemplate) {
+            throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
+        }
+
+        // Replace variables in email template
+        const emailBody = emailTemplate.replace('{NUME}', values.nume);
+        const body = encodeURIComponent(emailBody);
+
+        const gmailLink = document.getElementById('gmail-link');
+        gmailLink.href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
+        document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
+
+        const emailLinks = document.getElementById('email-links');
+
+        announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt actualizate cu informațiile din formular.');
+
+        emailLinks.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+
         // Create PDF document with error handling
         const filename = `Sesizare_CNCD_${values.nume_reclamat.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
 
@@ -522,7 +557,6 @@ async function generatePDF(event) {
 
         const isMobile = device.type === 'mobile' || device.type === 'tablet';
         const isSafari = browser.name === 'Safari' || browser.name === 'Mobile Safari';
-        const isChrome = browser.name === 'Chrome' || browser.name === 'Mobile Chrome';
 
         // Safari mobile needs application/octet-stream to open PDFs in new tab (issue #43)
         // Chrome mobile needs application/pdf with download attribute for proper filename (issue #45)
@@ -567,42 +601,6 @@ async function generatePDF(event) {
         setTimeout(() => {
             URL.revokeObjectURL(blobUrl);
         }, 60000); // Keep for 1 minute
-
-        complaintPreview.classList.add('hidden');
-        complaintPreview.classList.remove('block');
-        complaintPreview.setAttribute('aria-hidden', 'true');
-
-        // Set and display email links
-        const nume = encodeURIComponent(values.nume);
-        const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
-
-        // Load email template with error handling
-        const emailTemplateResponse = await fetch('email-template.txt');
-        if (!emailTemplateResponse.ok) {
-            throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
-        }
-
-        let emailTemplate = await emailTemplateResponse.text();
-        if (!emailTemplate) {
-            throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
-        }
-
-        // Replace variables in email template
-        const emailBody = emailTemplate.replace('{NUME}', values.nume);
-        const body = encodeURIComponent(emailBody);
-
-        const gmailLink = document.getElementById('gmail-link');
-        gmailLink.href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
-        document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
-
-        const emailLinks = document.getElementById('email-links');
-
-        announceToScreenReader('PDF generat cu succes. Link-urile pentru email sunt actualizate cu informațiile din formular.');
-
-        emailLinks.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
     } catch (error) {
         console.error('Error generating PDF:', error);
         announceToScreenReader(`Eroare la generarea PDF-ului: ${error.message}`);
