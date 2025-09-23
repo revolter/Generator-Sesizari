@@ -20,9 +20,9 @@ let emailTemplateCache = null;
 async function updateEmailLinks() {
     const values = getFormValues();
     
-    // Only update if we have the required fields
-    if (!values.nume_reclamat || !values.nume) {
-        // Reset to basic links if fields are empty
+    // Update if we have at least one of the required fields
+    if (!values.nume_reclamat && !values.nume) {
+        // Reset to basic links if both fields are empty
         const gmailLink = document.getElementById('gmail-link');
         const mailtoLink = document.getElementById('mailto-link');
         if (gmailLink) {
@@ -44,9 +44,15 @@ async function updateEmailLinks() {
         }
 
         if (emailTemplateCache) {
-            // Create subject and body
-            const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
-            const emailBody = emailTemplateCache.replace('{NUME}', values.nume);
+            // Create subject and body with available information
+            const subjectText = values.nume_reclamat ? 
+                `Sesizare discriminare - ${values.nume_reclamat}` : 
+                'Sesizare discriminare';
+            const subject = encodeURIComponent(subjectText);
+            
+            const emailBody = values.nume ? 
+                emailTemplateCache.replace('{NUME}', values.nume) : 
+                emailTemplateCache.replace('{NUME}', '[Nume]');
             const body = encodeURIComponent(emailBody);
 
             // Update the links
