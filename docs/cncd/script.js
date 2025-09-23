@@ -13,6 +13,67 @@ function getFormValues() {
     };
 }
 
+// Email template cache
+let emailTemplateCache = null;
+
+// Update email links reactively based on form fields
+async function updateEmailLinks() {
+    const values = getFormValues();
+    
+    // Only update if we have the required fields
+    if (!values.nume_reclamat || !values.nume) {
+        // Reset to basic links if fields are empty
+        const gmailLink = document.getElementById('gmail-link');
+        const mailtoLink = document.getElementById('mailto-link');
+        if (gmailLink) {
+            gmailLink.href = 'https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro';
+        }
+        if (mailtoLink) {
+            mailtoLink.href = 'mailto:support@cncd.ro';
+        }
+        return;
+    }
+
+    try {
+        // Load email template if not cached
+        if (!emailTemplateCache) {
+            const emailTemplateResponse = await fetch('email-template.txt');
+            if (emailTemplateResponse.ok) {
+                emailTemplateCache = await emailTemplateResponse.text();
+            }
+        }
+
+        if (emailTemplateCache) {
+            // Create subject and body
+            const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
+            const emailBody = emailTemplateCache.replace('{NUME}', values.nume);
+            const body = encodeURIComponent(emailBody);
+
+            // Update the links
+            const gmailLink = document.getElementById('gmail-link');
+            const mailtoLink = document.getElementById('mailto-link');
+            
+            if (gmailLink) {
+                gmailLink.href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
+            }
+            if (mailtoLink) {
+                mailtoLink.href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error updating email links:', error);
+        // Fall back to basic links
+        const gmailLink = document.getElementById('gmail-link');
+        const mailtoLink = document.getElementById('mailto-link');
+        if (gmailLink) {
+            gmailLink.href = 'https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro';
+        }
+        if (mailtoLink) {
+            mailtoLink.href = 'mailto:support@cncd.ro';
+        }
+    }
+}
+
 // Form validation
 function validateForm() {
     const values = getFormValues();
@@ -499,18 +560,25 @@ async function generatePDF(event) {
             signatureNode.appendChild(signatureImg);
         }
 
-        // Set and display email links
+        // Set and display email links (using cached template if available)
         const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
 
-        // Load email template with error handling
-        const emailTemplateResponse = await fetch('email-template.txt');
-        if (!emailTemplateResponse.ok) {
-            throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
-        }
-
-        let emailTemplate = await emailTemplateResponse.text();
+        let emailTemplate = emailTemplateCache;
+        
+        // Load email template if not cached
         if (!emailTemplate) {
-            throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
+            const emailTemplateResponse = await fetch('email-template.txt');
+            if (!emailTemplateResponse.ok) {
+                throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
+            }
+
+            emailTemplate = await emailTemplateResponse.text();
+            if (!emailTemplate) {
+                throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
+            }
+            
+            // Cache the template
+            emailTemplateCache = emailTemplate;
         }
 
         // Replace variables in email template
@@ -654,9 +722,12 @@ function initializeForm() {
             }
         }
     });
+
+    // Update email links after form initialization
+    updateEmailLinks();
 }
 
-// Add real-time validation with accessibility
+// Add real-time validation with accessibility and email link updates
 function addRealTimeValidation() {
     const formFields = ['nume', 'adresa', 'data_eveniment', 'nume_reclamat', 'adresa_reclamat', 'descriere', 'dovezi'];
 
@@ -699,6 +770,13 @@ function addRealTimeValidation() {
                     highlightField(fieldId, !isValid);
                 }
             });
+
+            // Add reactive email link updates for specific fields
+            if (fieldId === 'nume' || fieldId === 'nume_reclamat') {
+                field.addEventListener('input', () => {
+                    updateEmailLinks();
+                });
+            }
         }
     });
 }
