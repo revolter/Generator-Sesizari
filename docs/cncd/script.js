@@ -739,11 +739,6 @@ function addRealTimeValidation() {
                 field.addEventListener('input', () => {
                     updateEmailLinks();
                 });
-                
-                // Also add keyup event for better responsiveness
-                field.addEventListener('keyup', () => {
-                    updateEmailLinks();
-                });
             }
         }
     });
