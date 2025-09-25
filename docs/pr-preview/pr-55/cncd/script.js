@@ -20,20 +20,6 @@ let emailTemplateCache = null;
 async function updateEmailLinks() {
     const values = getFormValues();
     
-    // Update if we have at least one of the required fields
-    if (!values.nume_reclamat && !values.nume) {
-        // Reset to basic links if both fields are empty
-        const gmailLink = document.getElementById('gmail-link');
-        const mailtoLink = document.getElementById('mailto-link');
-        if (gmailLink) {
-            gmailLink.href = 'https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro';
-        }
-        if (mailtoLink) {
-            mailtoLink.href = 'mailto:support@cncd.ro';
-        }
-        return;
-    }
-
     try {
         // Load email template if not cached
         if (!emailTemplateCache) {
@@ -68,14 +54,14 @@ async function updateEmailLinks() {
         }
     } catch (error) {
         console.error('Error updating email links:', error);
-        // Fall back to basic links
+        // Fall back to basic links (HTML default)
         const gmailLink = document.getElementById('gmail-link');
         const mailtoLink = document.getElementById('mailto-link');
         if (gmailLink) {
-            gmailLink.href = 'https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro';
+            gmailLink.href = 'https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=Sesizare%20discriminare';
         }
         if (mailtoLink) {
-            mailtoLink.href = 'mailto:support@cncd.ro';
+            mailtoLink.href = 'mailto:support@cncd.ro?subject=Sesizare%20discriminare';
         }
     }
 }
@@ -566,35 +552,6 @@ async function generatePDF(event) {
             signatureNode.appendChild(signatureImg);
         }
 
-        // Set and display email links (using cached template if available)
-        const subject = encodeURIComponent(`Sesizare discriminare - ${values.nume_reclamat}`);
-
-        let emailTemplate = emailTemplateCache;
-        
-        // Load email template if not cached
-        if (!emailTemplate) {
-            const emailTemplateResponse = await fetch('email-template.txt');
-            if (!emailTemplateResponse.ok) {
-                throw new Error(`Eroare la încărcarea template-ului de email: ${emailTemplateResponse.status} ${emailTemplateResponse.statusText}`);
-            }
-
-            emailTemplate = await emailTemplateResponse.text();
-            if (!emailTemplate) {
-                throw new Error('Template-ul de email este gol sau nu a putut fi încărcat');
-            }
-            
-            // Cache the template
-            emailTemplateCache = emailTemplate;
-        }
-
-        // Replace variables in email template
-        const emailBody = emailTemplate.replace('{NUME}', values.nume);
-        const body = encodeURIComponent(emailBody);
-
-        const gmailLink = document.getElementById('gmail-link');
-        gmailLink.href = `https://mail.google.com/mail/u/0/?tf=cm&to=support@cncd.ro&su=${subject}&body=${body}`;
-        document.getElementById('mailto-link').href = `mailto:support@cncd.ro?subject=${subject}&body=${body}`;
-
         // Create PDF document with error handling
         const filename = `Sesizare_CNCD_${values.nume_reclamat.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
 
@@ -780,11 +737,6 @@ function addRealTimeValidation() {
             // Add reactive email link updates for specific fields
             if (fieldId === 'nume' || fieldId === 'nume_reclamat') {
                 field.addEventListener('input', () => {
-                    updateEmailLinks();
-                });
-                
-                // Also add keyup event for better responsiveness
-                field.addEventListener('keyup', () => {
                     updateEmailLinks();
                 });
             }
